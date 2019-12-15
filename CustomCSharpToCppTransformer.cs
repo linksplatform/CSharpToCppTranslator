@@ -75,7 +75,7 @@ namespace CSharpToCppTranslator
             (new Regex(@"([a-zA-Z0-9]+)\(int capacity\) { \(_elements, _allocated\) = \(new TreeElement\[capacity\], 1\); }"), "$1() { _allocated = 1; }", new Regex(@"Size[a-zA-Z]+Tree\.cs"), 0),
             // void PrintNodeValue(TElement node, StringBuilder sb) override { sb.Append(node); }
             //
-            (new Regex(@"[\r\n]{1,2}\s+[\r\n]{1,2}\s+void PrintNodeValue\(TElement node, StringBuilder sb\) override { sb\.Append\(node\); }"), "", new Regex(@"Size[a-zA-Z]+Tree\.cs"), 0),
+            (new Regex(@"[\r\n]{1,2}\s+[\r\n]{1,2}\s+[^\r\n]*PrintNodeValue\([^\(\r\n]+\) override {[^}\r\n]+}"), "", new Regex(@"Size[a-zA-Z]+Tree\.cs"), 0),
             // this->allocate(
             // allocate(
             (new Regex(@"this->(allocate|free|iszero)\("), "$1(", null, 0),
