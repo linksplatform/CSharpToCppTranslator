@@ -28,6 +28,9 @@ namespace CSharpToCppTranslator
             // EqualityComparer<TreeElement>.Default.Equals(this->GetElement(node), default)
             // iszero(GetElement(node), sizeof(TreeElement))
             (new Regex(@"EqualityComparer<TreeElement>\.Default\.Equals\(this->GetElement\(node\), default\)"), "iszero(this->GetElement(node), sizeof(TreeElement))", new Regex(@"Size[a-zA-Z]+Tree\.cs"), 0),
+            // Ensure.Always.ArgumentMeetsCriteria(
+            // Platform::Exceptions::EnsureExtensions::ArgumentMeetsCriteria(Ensure::Always, 
+            (new Regex(@"Ensure\.(?<field>Always|OnDebug)\.(?<method>ArgumentMeetsCriteria|ArgumentNotNull)\("), "Platform::Exceptions::EnsureExtensions::${method}(Ensure::${field}, ", null, 0),
             // Zero
             // 0
             (new Regex(@"(\W)(Zero)(\W)"), "${1}0$3", null, 0),
