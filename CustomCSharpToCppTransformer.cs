@@ -30,7 +30,7 @@ namespace CSharpToCppTranslator
             (new Regex(@"EqualityComparer<TreeElement>\.Default\.Equals\(this->GetElement\(node\), default\)"), "iszero(this->GetElement(node), sizeof(TreeElement))", new Regex(@"Size[a-zA-Z]+Tree\.cs"), 0),
             // EnsureOnDebugExtensionRoot
             // Platform::Exceptions::ExtensionRoots::EnsureOnDebugExtensionRoot
-            (new Regex(@"(?<before>[^:A-Za-z0-9_])(?<type>EnsureAlwaysExtensionRoot|EnsureOnDebugExtensionRoot|ThrowExtensionRoot)"), "${before}Platform::Exceptions::ExtensionRoots::${type}", null, 0),
+            (new Regex(@"(?<before>[^:A-Za-z0-9_])(?<!class )(?<type>EnsureAlwaysExtensionRoot|EnsureOnDebugExtensionRoot|ThrowExtensionRoot)"), "${before}Platform::Exceptions::ExtensionRoots::${type}", null, 0),
             // Ensure.Always.ArgumentMeetsCriteria(
             // Platform::Exceptions::EnsureExtensions::ArgumentMeetsCriteria(Ensure::Always, 
             (new Regex(@"Ensure\.(?<field>Always|OnDebug)\.(?<method>ArgumentMeetsCriteria|ArgumentNotNull)\("), "Platform::Exceptions::EnsureExtensions::${method}(Ensure::${field}, ", null, 0),
