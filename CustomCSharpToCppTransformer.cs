@@ -37,9 +37,9 @@ namespace CSharpToCppTranslator
             // IgnoredExceptions.RaiseExceptionIgnoredEvent(
             // IgnoredExceptions::RaiseExceptionIgnoredEvent(
             (new Regex(@"IgnoredExceptions\.RaiseExceptionIgnoredEvent\("), "IgnoredExceptions::RaiseExceptionIgnoredEvent(", null, 0),
-            // sb.append(exception.what()).append('\n'); ... sb.append(exception.StackTrace).append('\n');
-            // sb.append(exception.what()).append('\n');
-            (new Regex(@"sb\.append\(exception\.what\(\)\)\.append\('\\n'\);(.|\n)+sb\.append\(exception\.StackTrace\)\.append\('\\n'\);"), "sb.append(exception.what()).append('\\n');", new Regex(@"ExceptionExtensions\.cs"), 0),
+            // sb.append(exception.what()).append(1, '\n'); ... sb.append(exception.StackTrace).append('\n');
+            // sb.append(exception.what()).append(1, '\n');
+            (new Regex(@"sb\.append\(exception\.what\(\)\)\.append\(1, '\\n'\);(.|\n)+sb\.append\(exception\.StackTrace\)\.append\('\\n'\);"), "sb.append(exception.what()).append(1, '\\n');", new Regex(@"ExceptionExtensions\.cs"), 0),
             // Insert scope borders.
             // const std::exception& ex
             // const std::exception& ex/*~ex~*/
