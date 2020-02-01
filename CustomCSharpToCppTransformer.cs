@@ -42,11 +42,11 @@ namespace CSharpToCppTranslator
             // const std::exception& ex/*~ex~*/
             (new Regex(@"(?<before>\(| )(?<variableDefinition>(const )?(std::)?exception&? (?<variable>[_a-zA-Z0-9]+))(?<after>\W)"), "${before}${variableDefinition}/*~${variable}~*/${after}", null, 0),
             // Inside the scope of ~!ex!~ replace:
-            // ex.Ignore();
-            // Platform::Exceptions::ExceptionExtensions::Ignore(ex);
-            (new Regex(@"(?<scope>/\*~(?<variable>[_a-zA-Z0-9]+)~\*/)(?<separator>.|\n)(?<before>((?<!/\*~\k<variable>~\*/)(.|\n))*?)\k<variable>\.Ignore\(\);"), "${scope}${separator}${before}Platform::Exceptions::ExceptionExtensions::Ignore(${variable});", null, 10),
+            // ex.Ignore()
+            // Platform::Exceptions::ExceptionExtensions::Ignore(ex)
+            (new Regex(@"(?<scope>/\*~(?<variable>[_a-zA-Z0-9]+)~\*/)(?<separator>.|\n)(?<before>((?<!/\*~\k<variable>~\*/)(.|\n))*?)\k<variable>\.Ignore\(\)"), "${scope}${separator}${before}Platform::Exceptions::ExceptionExtensions::Ignore(${variable})", null, 10),
             // Remove scope borders.
-            // /*~_exceptionsBag~*/
+            // /*~ex~*/
             // 
             (new Regex(@"/\*~[_a-zA-Z0-9]+~\*/"), "", null, 0),
             // Zero
