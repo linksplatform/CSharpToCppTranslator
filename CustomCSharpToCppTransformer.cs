@@ -31,6 +31,24 @@ namespace CSharpToCppTranslator
             // Ensure.Always.ArgumentMeetsCriteria(
             // Platform::Exceptions::EnsureExtensions::ArgumentMeetsCriteria(Ensure::Always, 
             (new Regex(@"Ensure\.(?<field>Always|OnDebug)\.(?<method>ArgumentMeetsCriteria|ArgumentNotNull)\("), "Platform::Exceptions::EnsureExtensions::${method}(Ensure::${field}, ", null, 0),
+            // IgnoredExceptions.RaiseExceptionIgnoredEvent(
+            // IgnoredExceptions::RaiseExceptionIgnoredEvent(
+            (new Regex(@"IgnoredExceptions\.RaiseExceptionIgnoredEvent\("), "IgnoredExceptions::RaiseExceptionIgnoredEvent(", null, 0),
+            // sb.append(exception.Message).append('\n'); ... sb.append(exception.StackTrace).append('\n');
+            // sb.append(exception.Message).append('\n');
+            (new Regex(@"sb\.append\(exception\.Message\)\.append\('\\n'\);(.|\n)+sb\.append\(exception\.StackTrace\)\.append\('\\n'\);"), "sb.append(exception.Message).append('\\n');", new Regex(@"ExceptionExtensions\.cs"), 0),
+            // Insert scope borders.
+            // const std::exception& ex
+            // const std::exception& ex/*~ex~*/
+            (new Regex(@"(?<before>\(| )(?<variableDefinition>(const )?(std::)?exception&? (?<variable>[_a-zA-Z0-9]+))(?<after>\W)"), "${before}${variableDefinition}/*~${variable}~*/${after}", null, 0),
+            // Inside the scope of ~!ex!~ replace:
+            // ex.Ignore();
+            // Platform::Exceptions::ExceptionExtensions::Ignore(ex);
+            (new Regex(@"(?<scope>/\*~(?<variable>[_a-zA-Z0-9]+)~\*/)(?<separator>.|\n)(?<before>((?<!/\*~\k<variable>~\*/)(.|\n))*?)\k<variable>\.Ignore\(\);"), "${scope}${separator}${before}Platform::Exceptions::ExceptionExtensions::Ignore(${variable});", null, 10),
+            // Remove scope borders.
+            // /*~_exceptionsBag~*/
+            // 
+            (new Regex(@"/\*~[_a-zA-Z0-9]+~\*/"), "", null, 0),
             // Zero
             // 0
             (new Regex(@"(\W)(Zero)(\W)"), "${1}0$3", null, 0),
