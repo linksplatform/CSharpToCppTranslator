@@ -34,6 +34,9 @@ namespace CSharpToCppTranslator
             // Ensure.Always.ArgumentMeetsCriteria(
             // Platform::Exceptions::EnsureExtensions::ArgumentMeetsCriteria(Ensure::Always, 
             (new Regex(@"Ensure\.(?<field>Always|OnDebug)\.(?<method>ArgumentMeetsCriteria|ArgumentNotNull)\("), "Platform::Exceptions::EnsureExtensions::${method}(Ensure::${field}, ", null, 0),
+            // Ensure.Always.ArgumentMeetsCriteria(
+            // Platform::Exceptions::EnsureExtensions::ArgumentMeetsCriteria(Ensure::Always, 
+            (new Regex(@"Ensure\.(?<field>Always|OnDebug)\.(?<method>ArgumentMeetsCriteria|ArgumentNotNull)<(?<type>[^>;\n]+)>\("), "Platform::Exceptions::EnsureExtensions::${method}<${type}>(Ensure::${field}, ", null, 0),
             // IgnoredExceptions.RaiseExceptionIgnoredEvent(
             // IgnoredExceptions::RaiseExceptionIgnoredEvent(
             (new Regex(@"IgnoredExceptions\.RaiseExceptionIgnoredEvent\("), "IgnoredExceptions::RaiseExceptionIgnoredEvent(", null, 0),
