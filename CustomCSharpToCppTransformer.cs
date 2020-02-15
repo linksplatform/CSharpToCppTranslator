@@ -21,7 +21,7 @@ namespace CSharpToCppTranslator
             (new Regex(@"TElement path\[([_a-zA-Z0-9]+)\] = \{ \{0\} \};"), "TElement path[$1]; path[0] = 0;", new Regex(@"SizedAndThreadedAVLBalancedTreeMethods\.cs"), 0),
             // UncheckedConverter<TElement, long>.Default.Convert(node)
             // node
-            (new Regex(@"UncheckedConverter<[a-zA-Z0-9]+, [a-zA-Z0-9]+>\.Default\.Convert\((?<argument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\)"), "${argument}", null, 0),
+            (new Regex(@"UncheckedConverter<[a-zA-Z0-9:_]+, [a-zA-Z0-9:_]+>\.Default\.Convert\((?<argument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\)"), "${argument}", null, 0),
             // NumericType<TElement>.BytesSize
             // sizeof(TElement)
             (new Regex(@"NumericType<([a-zA-Z0-9]+)>\.BytesSize"), "sizeof($1)", new Regex(@"SizedAndThreadedAVLBalancedTreeMethods\.cs"), 0),
@@ -97,7 +97,7 @@ namespace CSharpToCppTranslator
             // template <typename TElement> class SizeBalancedTree : public SizeBalancedTreeMethods<TElement>
             // template <typename TElement, std::size_t N> class SizeBalancedTree : public Platform::Collections::Methods::Trees::SizeBalancedTreeMethods<TElement>
             (new Regex(@"template <typename TElement> class ([a-zA-Z0-9]+) : public ([a-zA-Z0-9]+)<TElement>"), "template <typename TElement, std::size_t N> class $1 : public Platform::Collections::Methods::Trees::$2<TElement>", new Regex(@"Size[a-zA-Z]+Tree\.cs"), 0),
-            // SizeBalancedTree(int capacity) { (_elements, _allocated) = (new TreeElement[capacity], 1); }
+            // SizeBalancedTree(std::int32_t capacity) { (_elements, _allocated) = (new TreeElement[capacity], 1); }
             // SizeBalancedTree() { _allocated = 1; }
             (new Regex(@"([a-zA-Z0-9]+)\(int capacity\) { \(_elements, _allocated\) = \(new TreeElement\[capacity\], 1\); }"), "$1() { _allocated = 1; }", new Regex(@"Size[a-zA-Z]+Tree\.cs"), 0),
             // void PrintNodeValue(TElement node, StringBuilder sb) override { sb.Append(node); }
