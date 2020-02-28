@@ -21,7 +21,7 @@ namespace CSharpToCppTranslator
             {
                 var filename = Path.GetFileNameWithoutExtension(path);
                 var targetPath = Path.Combine(Path.GetDirectoryName(path), filename);
-                _baseTransformer.WriteStepsToFiles(path, targetPath, _targetExtension);
+                _baseTransformer.WriteStepsToFiles(path, targetPath, _targetExtension, skipFilesWithNoChanges: true);
             }
             return _baseTransformer.Transform(source, context);
         }
