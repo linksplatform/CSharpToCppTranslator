@@ -11,11 +11,11 @@ namespace CSharpToCppTranslator
         public static readonly IList<ISubstitutionRule> CustomRules = new List<SubstitutionRule>
         {
             // Just delete it in GenericCollectionMethodsBase.cs
-            (new Regex(@"\r?\n[\t ]+[^\r\n]*GetZero(.|\s)+Increment\(One\)(.|\s)+?}"), "", 0),
+            (new Regex(@"\r?\n[\t ]+[^\r\n]* GetZero(.|\s)+Increment\(One\)(.|\s)+?}"), "", 0),
             // Just delete it in SizedBinaryTreeMethodsBase.cs
-            (new Regex(@"\r?\n[\t ]+[^\r\n]*FixSizes(.|\s)+};"), "    };", 0),
+            (new Regex(@"\r?\n[\t ]+[^\r\n]* FixSizes(.|\s)+};"), "    };", 0),
             // Just delete it in SizedAndThreadedAVLBalancedTreeMethods.cs
-            (new Regex(@"\r?\n[\t ]+[^\r\n]*PrintNode(.|\s)+?}[\t ]*\r?\n"), "", 0),
+            (new Regex(@"\r?\n[\t ]+[^\r\n]* PrintNode(.|\s)+?}[\t ]*\r?\n"), "", 0),
             // TElement path[MaxPath] = { {0} }; 
             // TElement path[MaxPath]; path[0] = 0;
             (new Regex(@"TElement path\[([_a-zA-Z0-9]+)\] = \{ \{0\} \};"), "TElement path[$1]; path[0] = 0;", 0),
