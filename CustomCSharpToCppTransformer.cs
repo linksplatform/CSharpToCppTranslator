@@ -102,7 +102,7 @@ namespace CSharpToCppTranslator
             (new Regex(@"(?<separator>\W)this->GreaterThanZero\((?<argument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\)"), "${separator}(${argument}) > 0", 0),
             // template <typename TElement> class SizeBalancedTree : public SizeBalancedTreeMethods<TElement>
             // template <typename TElement, std::size_t N> class SizeBalancedTree : public Platform::Collections::Methods::Trees::SizeBalancedTreeMethods<TElement>
-            (new Regex(@"template <typename TElement> class ([a-zA-Z0-9]+) : public ([a-zA-Z0-9]+)<TElement>"), "template <typename TElement, std::size_t N> class $1 : public Platform::Collections::Methods::Trees::$2<TElement>", 0),
+            (new Regex(@"template <typename TElement> class ([a-zA-Z0-9]+)Tree : public ([a-zA-Z0-9]+)TreeMethods<TElement>"), "template <typename TElement, std::size_t N> class $1 : public Platform::Collections::Methods::Trees::$2<TElement>", 0),
             // SizeBalancedTree(std::int32_t capacity) { (_elements, _allocated) = (new TreeElement[capacity], 1); }
             // SizeBalancedTree() { _allocated = 1; }
             (new Regex(@"([a-zA-Z0-9]+)\(std::int32_t capacity\) { \(_elements, _allocated\) = \(new TreeElement\[capacity\], 1\); }"), "$1() { _allocated = 1; }", 0),
@@ -120,7 +120,7 @@ namespace CSharpToCppTranslator
             (new Regex(@"&([a-zA-Z0-9]+)->([a-zA-Z0-9]+)"), "&$1.$2", 0),
             // sizeBalancedTree.Count
             // sizeBalancedTree.GetCount()
-            (new Regex(@"([a-zA-Z0-9]+).Count"), "$1.GetCount()", 0),
+            (new Regex(@"([a-zA-Z0-9]+)\.Count"), "$1.GetCount()", 0),
             // sizeBalancedTree.Allocate
             // [&]()-> auto { return sizeBalancedTree.Allocate(); }
             (new Regex(@"(\(|, )([a-zA-Z0-9]+)\.(Allocate)"), "$1[&]()-> auto { return $2.$3(); }", 0),
