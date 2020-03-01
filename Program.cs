@@ -1,4 +1,7 @@
 using System;
+using System.IO;
+using System.Linq;
+using Platform.Collections;
 using Platform.Collections.Arrays;
 using Platform.RegularExpressions.Transformer;
 
@@ -11,11 +14,17 @@ namespace CSharpToCppTranslator
 
         static void Main(string[] args)
         {
-            //for (int i = 0; i < args.Length; i++)
-            //{
-            //    Console.WriteLine(args[i]);   
-            //}
-            //args = new string[] { @"D:\CodeArchive\Links\Ranges\csharp\Platform.Ranges\EnsureExtensions.cs", @"D:\CodeArchive\Links\Ranges\cpp\Platform.Ranges\EnsureExtensions.cpp", "debug" };
+            if (args.IsNullOrEmpty())
+            {
+                var solutionFolder = Path.GetFullPath("../../../../.");
+                var csharpFolder = Path.Combine(solutionFolder, "csharp");
+                var cppFolder = Path.Combine(solutionFolder, "cpp");
+                var folders = Directory.GetDirectories(csharpFolder).OrderBy(x => x.Length);
+                var sourceProjectFolder = folders.First();
+                var projectFolderRelativePath = Path.GetRelativePath(csharpFolder, sourceProjectFolder);
+                var targetProjectFolder = Path.Combine(cppFolder, projectFolderRelativePath);
+                args = new string[] { sourceProjectFolder, targetProjectFolder.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar, "debug"};
+            }
             var csharpToCpp = new CustomCSharpToCppTransformer();
             var transformer = IsDebugModeRequested(args) ? new LoggingFileTransformer(csharpToCpp, SourceFileExtension, TargetFileExtension) : new FileTransformer(csharpToCpp, SourceFileExtension, TargetFileExtension);
             new TransformerCLI(transformer).Run(args);
