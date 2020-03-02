@@ -46,9 +46,9 @@ namespace CSharpToCppTranslator
             // IgnoredExceptions.RaiseExceptionIgnoredEvent(
             // IgnoredExceptions::RaiseExceptionIgnoredEvent(
             (new Regex(@"IgnoredExceptions\.RaiseExceptionIgnoredEvent\("), "IgnoredExceptions::RaiseExceptionIgnoredEvent(", 0),
-            // sb.append(exception.what()).append(1, '\n'); ... sb.append(exception.StackTrace).append(1, '\n');
+            // sb.append(exception.what()).append(1, '\n'); ... sb.append(Platform::Converters::To<std::string>(exception.StackTrace)).append(1, '\n');
             // sb.append(exception.what()).append(1, '\n');
-            (new Regex(@"sb\.append\(exception\.what\(\)\)\.append\(1, '\\n'\);(.|\n)+sb\.append\(exception\.StackTrace\)\.append\(1, '\\n'\);"), "sb.append(exception.what()).append(1, '\\n');", 0),
+            (new Regex(@"(?<begin>sb\.append\(exception\.what\(\)\)\.append\(1, '\\n'\);)(.|\n)+sb\.append\(Platform::Converters::To<std::string>\(exception\.StackTrace\)\)\.append\(1, '\\n'\);"), "${begin}", 0),
             // Insert scope borders.
             // const std::exception& ex
             // const std::exception& ex/*~ex~*/
