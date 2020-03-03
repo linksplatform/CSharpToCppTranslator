@@ -10,7 +10,7 @@ namespace CSharpToCppTranslator
     public class Program
     {
         private const string SourceFileExtension = ".cs";
-        private const string TargetFileExtension = ".cpp";
+        private const string TargetFileExtension = ".h";
 
         static void Main(string[] args)
         {
