@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Platform.RegularExpressions.Transformer;
@@ -100,9 +101,12 @@ namespace CSharpToCppTranslator
             // this->GreaterThanZero(argument)
             // (argument) > 0
             (new Regex(@"(?<separator>\W)this->GreaterThanZero\((?<argument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\)"), "${separator}(${argument}) > 0", 0),
+            // template <typename ...> class RecursionlessSizeBalancedTree;
+            // template <std::size_t N, typename ...> class RecursionlessSizeBalancedTree;
+            (new Regex(@"template <typename \.{3}> class ([a-zA-Z0-9]+Tree);"), "template <std::size_t N, typename ...> class $1;", 0),
             // template <typename TElement> class SizeBalancedTree : public SizeBalancedTreeMethods<TElement>
-            // template <typename TElement, std::size_t N> class SizeBalancedTree : public Platform::Collections::Methods::Trees::SizeBalancedTreeMethods<TElement>
-            (new Regex(@"template <typename TElement> class ([a-zA-Z0-9]+Tree) : public ([a-zA-Z0-9]+TreeMethods)<TElement>"), "template <typename TElement, std::size_t N> class $1 : public Platform::Collections::Methods::Trees::$2<TElement>", 0),
+            // template <std::size_t N, typename TElement> class SizeBalancedTree<N, TElement> : public Platform::Collections::Methods::Trees::SizeBalancedTreeMethods<TElement>
+            (new Regex(@"template <typename TElement> class ([a-zA-Z0-9]+Tree)<TElement> : public ([a-zA-Z0-9]+TreeMethods)<TElement>"), "template <std::size_t N, typename TElement> class $1<N, TElement> : public Platform::Collections::Methods::Trees::$2<TElement>", 0),
             // SizeBalancedTree(std::int32_t capacity) { (_elements, _allocated) = (new TreeElement[capacity], 1); }
             // SizeBalancedTree() { _allocated = 1; }
             (new Regex(@"([a-zA-Z0-9]+)\(std::int32_t capacity\) { \(_elements, _allocated\) = \(new TreeElement\[capacity\], 1\); }"), "$1() { _allocated = 1; }", 0),
@@ -113,8 +117,8 @@ namespace CSharpToCppTranslator
             // allocate(
             (new Regex(@"this->(allocate|free|iszero)\("), "$1(", 0),
             // auto sizeBalancedTree = new SizeBalancedTree<uint>(10000);
-            // SizeBalancedTree<uint, 10000> sizeBalancedTree;
-            (new Regex(@"auto ([a-zA-Z0-9]+) = new ([a-zA-Z0-9]+)<([_a-zA-Z0-9:]+)>\(([0-9]+)\);"), "$2<$3, $4> $1;", 0),
+            // SizeBalancedTree<10000, uint> sizeBalancedTree;
+            (new Regex(@"auto ([a-zA-Z0-9]+) = new ([a-zA-Z0-9]+)<([_a-zA-Z0-9:]+)>\(([0-9]+)\);"), "$2<$4, $3> $1;", 0),
             // &sizeBalancedTree->Root
             // &sizeBalancedTree.Root
             (new Regex(@"&([a-zA-Z0-9]+)->([a-zA-Z0-9]+)"), "&$1.$2", 0),
@@ -133,6 +137,10 @@ namespace CSharpToCppTranslator
             // SizedBinaryTreeMethodsBase
             // Platform::Collections::Methods::Trees::SizedBinaryTreeMethodsBase
             (new Regex(@"\(SizedBinaryTreeMethodsBase<TElement>"), "(Platform::Collections::Methods::Trees::SizedBinaryTreeMethodsBase<TElement>&", 0),
+            // class Range
+            // template <typename ...> struct Range;\ntemplate<> class Range<>
+            (new Regex(@"(\r?\n)([ \t]+)class (Range)(\s|\n)"), "$1$2template <typename ...> struct $3;" + Environment.NewLine + "$2template<> class $3<>$4", 0),
+
         }.Cast<ISubstitutionRule>().ToList();
 
         public CustomCSharpToCppTransformer() : base(CustomRules) { }
