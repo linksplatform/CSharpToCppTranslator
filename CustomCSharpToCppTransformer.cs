@@ -118,7 +118,7 @@ namespace CSharpToCppTranslator
             (new Regex(@"this->(allocate|free|iszero)\("), "$1(", 0),
             // auto sizeBalancedTree = new SizeBalancedTree<uint>(10000);
             // SizeBalancedTree<10000, uint> sizeBalancedTree;
-            (new Regex(@"auto ([a-zA-Z0-9]+) = new ([a-zA-Z0-9]+)<([_a-zA-Z0-9:]+)>\(([0-9]+)\);"), "$2<$4, $3> $1;", 0),
+            (new Regex(@"auto ([a-zA-Z0-9]+) = new ([a-zA-Z0-9]+Tree)<([_a-zA-Z0-9:]+)>\(([0-9]+)\);"), "$2<$4, $3> $1;", 0),
             // &sizeBalancedTree->Root
             // &sizeBalancedTree.Root
             (new Regex(@"&([a-zA-Z0-9]+)->([a-zA-Z0-9]+)"), "&$1.$2", 0),
