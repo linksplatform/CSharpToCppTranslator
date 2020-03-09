@@ -140,7 +140,9 @@ namespace CSharpToCppTranslator
             // class Range
             // template <typename ...> struct Range;\ntemplate<> class Range<>
             (new Regex(@"(\r?\n)([ \t]+)class (Range)(\s|\n)"), "$1$2template <typename ...> struct $3;" + Environment.NewLine + "$2template<> class $3<>$4", 0),
-
+            // public: static decimal Difference(Range<decimal> range) { return range.Maximum - range.Minimum; }
+            // 
+            (new Regex(@"(\r?\n)([ \t]+)[^\n]+(\W)decimal(\W)+[^\n]+[^\r](\r?\n)"), Environment.NewLine, 0),
         }.Cast<ISubstitutionRule>().ToList();
 
         public CustomCSharpToCppTransformer() : base(CustomRules) { }
