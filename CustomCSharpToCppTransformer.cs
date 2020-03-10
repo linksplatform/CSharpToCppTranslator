@@ -62,6 +62,18 @@ namespace CSharpToCppTranslator
             // /*~ex~*/
             // 
             (new Regex(@"/\*~[_a-zA-Z0-9]+~\*/"), "", 0),
+            // Insert scope borders.
+            // auto range = Range<std::int32_t>(1, 3);
+            // auto range = Range<std::int32_t>(1, 3);/*~range~*/
+            (new Regex(@"(?<before>\(| )(?<variableDefinition>(const )?((Platform::Ranges::)?Range<[^<>\n]+>&?|auto) (?<variable>[_a-zA-Z][_a-zA-Z0-9]+) = (new )?Range<[^<>\n]+>\([^()\n]+\);)"), "${before}${variableDefinition}/*~${variable}~*/", 0),
+            // Inside the scope of ~!range!~ replace:
+            // range.Difference()
+            // Platform::Ranges::RangeExtensions::Difference(range)
+            (new Regex(@"(?<scope>/\*~(?<variable>[_a-zA-Z0-9]+)~\*/)(?<separator>.|\n)(?<before>((?<!/\*~\k<variable>~\*/)(.|\n))*?)\k<variable>\.Difference\(\)"), "${scope}${separator}${before}Platform::Ranges::RangeExtensions::Difference(${variable})", 10),
+            // Remove scope borders.
+            // /*~range~*/
+            // 
+            (new Regex(@"/\*~[_a-zA-Z0-9]+~\*/"), "", 0),
             // Zero
             // 0
             (new Regex(@"(\W)(Zero)(\W)"), "${1}0$3", 0),
