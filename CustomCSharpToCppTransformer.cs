@@ -155,9 +155,6 @@ namespace CSharpToCppTranslator
             // public: static decimal Difference(Range<decimal> range) { return range.Maximum - range.Minimum; }
             // 
             (new Regex(@"(\r?\n)([ \t]+)[^\n]+(\W)decimal(\W)+[^\n]+[^\r](\r?\n)"), Environment.NewLine, 0),
-            // public: override std::int32_t GetHashCode() { return {Minimum, Maximum}.GetHashCode(); }
-            //
-            (new Regex(@"(\r?\n)([ \t]+)[^\n]+(\W)GetHashCode\(\)(\s|\n)*\{[^\n]+[^\r](\r?\n)"), Environment.NewLine, 0),
         }.Cast<ISubstitutionRule>().ToList();
 
         public CustomCSharpToCppTransformer() : base(CustomRules) { }
