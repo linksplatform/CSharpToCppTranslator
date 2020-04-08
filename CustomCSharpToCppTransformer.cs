@@ -152,6 +152,15 @@ namespace CSharpToCppTranslator
             // class Range
             // template <typename ...> struct Range;\ntemplate<> class Range<>
             (new Regex(@"(\r?\n)([ \t]+)class (Range)(\s|\n)"), "$1$2template <typename ...> struct $3;" + Environment.NewLine + "$2template<> class $3<>$4", 0),
+            // class Disposable
+            // template <typename ...> class Disposable;\ntemplate<> class Disposable<>
+            (new Regex(@"(\r?\n)([ \t]+)class (Disposable)(\s|\n)"), "$1$2template <typename ...> class $3;" + Environment.NewLine + "$2template<> class $3<>$4", 0),
+            // (Disposal 
+            // (std::function<Disposal> 
+            (new Regex(@"(\()(Disposal)( )"), "$1std::function<$2>$3", 0),
+            // OnDispose = [&](auto manual, auto wasDisposed)
+            // OnDispose = (std::function<Disposal>)[&](auto manual, auto wasDisposed)
+            (new Regex(@"(?<variable>[a-zA-Z_][a-zA-Z0-9_]*)(?<operator>\s*=\s*)(?<after>\[&\]\(auto manual, auto wasDisposed\))"), "${variable}${operator}(std::function<Disposal>)${after}", 0),
             // public: static decimal Difference(Range<decimal> range) { return range.Maximum - range.Minimum; }
             // 
             (new Regex(@"(\r?\n)([ \t]+)[^\n]+(\W)decimal(\W)+[^\n]+[^\r](\r?\n)"), Environment.NewLine, 0),
