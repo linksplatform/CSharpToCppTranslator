@@ -135,8 +135,8 @@ namespace CSharpToCppTranslator
             // &sizeBalancedTree.Root
             (new Regex(@"&([a-zA-Z0-9]+)->([a-zA-Z0-9]+)"), "&$1.$2", 0),
             // sizeBalancedTree.Count
-            // sizeBalancedTree.GetCount()
-            (new Regex(@"([a-zA-Z0-9]+)\.Count"), "$1.GetCount()", 0),
+            // sizeBalancedTree.Count()
+            (new Regex(@"([a-zA-Z0-9]+)\.Count"), "$1.Count()", 0),
             // sizeBalancedTree.Allocate
             // [&]()-> auto { return sizeBalancedTree.Allocate(); }
             (new Regex(@"(\(|, )([a-zA-Z0-9]+)\.(Allocate)"), "$1[&]()-> auto { return $2.$3(); }", 0),
@@ -158,9 +158,6 @@ namespace CSharpToCppTranslator
             // (Disposal 
             // (std::function<Disposal> 
             (new Regex(@"(\()(Disposal)( )"), "$1std::function<$2>$3", 0),
-            // OnDispose = [&](auto manual, auto wasDisposed)
-            // OnDispose = (std::function<Disposal>)[&](auto manual, auto wasDisposed)
-            (new Regex(@"(?<variable>[a-zA-Z_][a-zA-Z0-9_]*)(?<operator>\s*=\s*)(?<after>\[&\]\(auto manual, auto wasDisposed\))"), "${variable}${operator}(std::function<Disposal>)${after}", 0),
             // public: static decimal Difference(Range<decimal> range) { return range.Maximum - range.Minimum; }
             // 
             (new Regex(@"(\r?\n)([ \t]+)[^\n]+(\W)decimal(\W)+[^\n]+[^\r](\r?\n)"), Environment.NewLine, 0),
