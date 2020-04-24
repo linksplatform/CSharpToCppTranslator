@@ -33,17 +33,23 @@ namespace CSharpToCppTranslator
             // Platform::Exceptions::ExtensionRoots::EnsureOnDebugExtensionRoot
             (new Regex(@"(?<before>[^:A-Za-z0-9_])(?<!class )(?<type>EnsureAlwaysExtensionRoot|EnsureOnDebugExtensionRoot|ThrowExtensionRoot)"), "${before}Platform::Exceptions::ExtensionRoots::${type}", 0),
             // Ensure.Always.ArgumentMeetsCriteria(
-            // Platform::Exceptions::EnsureExtensions::ArgumentMeetsCriteria(Ensure::Always, 
+            // Platform::Exceptions::EnsureExtensions::ArgumentMeetsCriteria(Platform::Exceptions::Ensure::Always, 
             (new Regex(@"Ensure\.(?<field>Always|OnDebug)\.(?<method>ArgumentMeetsCriteria|ArgumentNotNull)\("), "Platform::Exceptions::EnsureExtensions::${method}(Platform::Exceptions::Ensure::${field}, ", 0),
             // Ensure.Always.ArgumentMeetsCriteria(
-            // Platform::Exceptions::EnsureExtensions::ArgumentMeetsCriteria(Ensure::Always, 
+            // Platform::Exceptions::EnsureExtensions::ArgumentMeetsCriteria(Platform::Exceptions::Ensure::Always, 
             (new Regex(@"Ensure\.(?<field>Always|OnDebug)\.(?<method>ArgumentMeetsCriteria|ArgumentNotNull)<(?<type>[^>;\n]+)>\("), "Platform::Exceptions::EnsureExtensions::${method}<${type}>(Platform::Exceptions::Ensure::${field}, ", 0),
             // Ensure.Always.ArgumentInRange(
-            // Platform::Ranges::EnsureExtensions::ArgumentInRange(Ensure::Always, 
+            // Platform::Ranges::EnsureExtensions::ArgumentInRange(Platform::Exceptions::Ensure::Always, 
             (new Regex(@"Ensure\.(?<field>Always|OnDebug)\.(?<method>MaximumArgumentIsGreaterOrEqualToMinimum|ArgumentInRange)\("), "Platform::Ranges::EnsureExtensions::${method}(Platform::Exceptions::Ensure::${field}, ", 0),
             // Ensure.Always.ArgumentInRange(
-            // Platform::Ranges::EnsureExtensions::ArgumentInRange(Ensure::Always, 
+            // Platform::Ranges::EnsureExtensions::ArgumentInRange(Platform::Exceptions::Ensure::Always, 
             (new Regex(@"Ensure\.(?<field>Always|OnDebug)\.(?<method>MaximumArgumentIsGreaterOrEqualToMinimum|ArgumentInRange)<(?<type>[^>;\n]+)>\("), "Platform::Ranges::EnsureExtensions::${method}<${type}>(Platform::Exceptions::Ensure::${field}, ", 0),
+            // Ensure.Always.NotDisposed(
+            // Platform::Ranges::EnsureExtensions::NotDisposed(Platform::Exceptions::Ensure::Always, 
+            (new Regex(@"Ensure\.(?<field>Always|OnDebug)\.(?<method>NotDisposed)\("), "Platform::Disposables::EnsureExtensions::${method}(Platform::Exceptions::Ensure::${field}, ", 0),
+            // Ensure.Always.NotDisposed(
+            // Platform::Ranges::EnsureExtensions::NotDisposed(Platform::Exceptions::Ensure::Always, 
+            (new Regex(@"Ensure\.(?<field>Always|OnDebug)\.(?<method>NotDisposed)<(?<type>[^>;\n]+)>\("), "Platform::Disposables::EnsureExtensions::${method}<${type}>(Platform::Exceptions::Ensure::${field}, ", 0),
             // IgnoredExceptions.RaiseExceptionIgnoredEvent(
             // IgnoredExceptions::RaiseExceptionIgnoredEvent(
             (new Regex(@"IgnoredExceptions\.RaiseExceptionIgnoredEvent\("), "IgnoredExceptions::RaiseExceptionIgnoredEvent(", 0),
