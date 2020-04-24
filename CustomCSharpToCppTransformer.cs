@@ -167,6 +167,15 @@ namespace CSharpToCppTranslator
             // public: static decimal Difference(Range<decimal> range) { return range.Maximum - range.Minimum; }
             // 
             (new Regex(@"(\r?\n)([ \t]+)[^\n]+(\W)decimal(\W)+[^\n]+[^\r](\r?\n)"), Environment.NewLine, 0),
+            // private: inline static const AppDomain _currentDomain = AppDomain.CurrentDomain;
+            // 
+            (new Regex(@"\r?\n[\t ]*[^\n]+AppDomain[^\n]+=[\t ]*AppDomain\.CurrentDomain;"), "", 0),
+            // UnsubscribeFromProcessExitedEventIfPossible();
+            // 
+            (new Regex(@"\r?\n[\t ]*UnsubscribeFromProcessExitedEventIfPossible\(\);"), "", 0),
+            // UnsubscribeFromProcessExitedEventIfPossible() { ... }
+            // 
+            (new Regex(@"\r?\n(?<indent>[\t ]*)[^\n]+UnsubscribeFromProcessExitedEventIfPossible\(\)(.|\n)+?\r?\n\k<indent>}"), "", 0),
         }.Cast<ISubstitutionRule>().ToList();
 
         public CustomCSharpToCppTransformer() : base(CustomRules) { }
