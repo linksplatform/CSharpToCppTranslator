@@ -7,12 +7,12 @@ using Platform.RegularExpressions.Transformer;
 
 namespace CSharpToCppTranslator
 {
-    public class Program
+    public static class Program
     {
         private const string DefaultSourceFileExtension = ".cs";
         private const string DefaultTargetFileExtension = ".h";
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             if (args.IsNullOrEmpty())
             {
@@ -23,7 +23,7 @@ namespace CSharpToCppTranslator
                 var sourceProjectFolder = folders.First();
                 var projectFolderRelativePath = Path.GetRelativePath(csharpFolder, sourceProjectFolder);
                 var targetProjectFolder = Path.Combine(cppFolder, projectFolderRelativePath);
-                args = new string[] { sourceProjectFolder, targetProjectFolder.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar, "debug"};
+                args = new[] { sourceProjectFolder, targetProjectFolder.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar, "debug"};
             }
             var sourceFileExtension = GetSourceFileExtension(args);
             var targetFileExtension = GetTargetFileExtension(args);
@@ -32,10 +32,10 @@ namespace CSharpToCppTranslator
             new TransformerCLI(transformer).Run(args);
         }
 
-        static string GetSourceFileExtension(string[] args) => args.TryGetElement(2, out string sourceFileExtension) ? sourceFileExtension : DefaultSourceFileExtension;
+        private static string GetSourceFileExtension(string[] args) => args.TryGetElement(2, out var sourceFileExtension) ? sourceFileExtension : DefaultSourceFileExtension;
 
-        static string GetTargetFileExtension(string[] args) => args.TryGetElement(3, out string targetFileExtension) ? targetFileExtension : DefaultTargetFileExtension;
+        private static string GetTargetFileExtension(string[] args) => args.TryGetElement(3, out var targetFileExtension) ? targetFileExtension : DefaultTargetFileExtension;
 
-        static private bool IsDebugModeRequested(string[] args) => args.TryGetElement(4, out string debugArgument) ? string.Equals(debugArgument, "debug", StringComparison.OrdinalIgnoreCase) : false;
+        private static bool IsDebugModeRequested(string[] args) => args.TryGetElement(4, out var debugArgument) && string.Equals(debugArgument, "debug", StringComparison.OrdinalIgnoreCase);
     }
 }
