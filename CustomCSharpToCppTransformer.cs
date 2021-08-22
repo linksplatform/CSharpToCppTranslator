@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -7,8 +7,21 @@ using Platform.RegularExpressions.Transformer.CSharpToCpp;
 
 namespace CSharpToCppTranslator
 {
+    /// <summary>
+    /// <para>
+    /// Represents the custom sharp to cpp transformer.
+    /// </para>
+    /// <para></para>
+    /// </summary>
+    /// <seealso cref="CSharpToCppTransformer"/>
     public class CustomCSharpToCppTransformer : CSharpToCppTransformer
     {
+        /// <summary>
+        /// <para>
+        /// The to list.
+        /// </para>
+        /// <para></para>
+        /// </summary>
         public static readonly IList<ISubstitutionRule> CustomRules = new List<SubstitutionRule>
         {
             // Just delete it in GenericCollectionMethodsBase.cs
@@ -178,6 +191,12 @@ namespace CSharpToCppTranslator
             (new Regex(@"\r?\n(?<indent>[\t ]*)[^\n]+UnsubscribeFromProcessExitedEventIfPossible\(\)(.|\n)+?\r?\n\k<indent>}"), "", 0),
         }.Cast<ISubstitutionRule>().ToList();
 
+        /// <summary>
+        /// <para>
+        /// Initializes a new <see cref="CustomCSharpToCppTransformer"/> instance.
+        /// </para>
+        /// <para></para>
+        /// </summary>
         public CustomCSharpToCppTransformer() : base(CustomRules) { }
     }
 }
