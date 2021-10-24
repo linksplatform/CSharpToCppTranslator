@@ -10,10 +10,10 @@ A specific translator for LinksPlatform's libraries.
 
 Translate `.cs` to `.h`:
 ```sh
-export BASE_PATH=/home/konard/Archive/Code/Links/Data.Doublets/csharp/Platform.Data.Doublets/Memory/United/Specific/; ls -p "$BASE_PATH" | grep -v / | grep -v .csproj | sed -e "s|csharp|cpp|" | sed -e 's/\.cs$//' | sed -e "s|^|${BASE_PATH}|" | xargs -n1 ./translate.sh "h"
+export BASE_PATH=/home/konard/Archive/Code/Links/Data.Doublets/csharp/Platform.Data.Doublets; find "$BASE_PATH" -type f | grep -v .csproj | sed -e 's/\.cs$//' | xargs -n1 ./translate.sh "h" "s|csharp|cpp|"
 ```
 
 Translate `.cs` to `.cpp`:
 ```sh
-export BASE_PATH=/home/konard/Archive/Code/Links/Data.Doublets/csharp/Platform.Data.Doublets/Memory/United/Specific/; ls -p "$BASE_PATH" | grep -v / | grep -v .csproj | sed -e "s|csharp|cpp|" | sed -e 's/\.cs$//' | sed -e "s|^|${BASE_PATH}|" | xargs -n1 ./translate.sh "cpp"
+export BASE_PATH=/home/konard/Archive/Code/Links/Data.Doublets/csharp/Platform.Data.Doublets.Benchmarks; find "$BASE_PATH" -type f | grep -v .csproj | sed -e 's/\.cs$//' | xargs -n1 ./translate.sh "cpp" "s|csharp|cpp|"
 ```
