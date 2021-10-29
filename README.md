@@ -4,3 +4,16 @@
 
 # CSharpToCppTranslator
 A specific translator for LinksPlatform's libraries.
+
+## Example
+`translate.sh` script is useful when Translator fails to translate the whole directory in one go.
+
+Translate `.cs` to `.h`:
+```sh
+export BASE_PATH=/home/konard/Archive/Code/Links/Data.Doublets/csharp/Platform.Data.Doublets; find "$BASE_PATH" -type f | grep -v .csproj | sed -e 's/\.cs$//' | xargs -n1 ./translate.sh "h" "s|csharp|cpp|"
+```
+
+Translate `.cs` to `.cpp`:
+```sh
+export BASE_PATH=/home/konard/Archive/Code/Links/Data.Doublets/csharp/Platform.Data.Doublets.Benchmarks; find "$BASE_PATH" -type f | grep -v .csproj | sed -e 's/\.cs$//' | xargs -n1 ./translate.sh "cpp" "s|csharp|cpp|"
+```

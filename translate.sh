@@ -1,4 +1,15 @@
 #!/bin/bash
-echo "started ${1}.h"
-dotnet run -c Release "${1}.cs" "${1}.h"
-echo "done ${1}.h"
+
+if [ ! -z "${3}" ]
+then
+
+  SOURCE="${3}.cs"
+  TARGET_EXTENSION="${1:-'h'}"
+  TARGET_PATH=$(echo "${3}" | sed -e "${2}")
+  TARGET="${TARGET_PATH}.${TARGET_EXTENSION}"
+
+  echo "started $SOURCE"
+  dotnet run -c Release "$SOURCE" "$TARGET"
+  echo "done as $TARGET"
+
+fi
