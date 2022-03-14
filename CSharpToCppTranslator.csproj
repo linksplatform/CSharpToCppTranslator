@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Platform.Collections" Version="0.3.2" />
     <PackageReference Include="Platform.IO" Version="0.3.2" />
-    <PackageReference Include="Platform.RegularExpressions.Transformer.CSharpToCpp" Version="0.2.38" />
+    <PackageReference Include="Platform.RegularExpressions.Transformer.CSharpToCpp" Version="0.3.0" />
   </ItemGroup>
 
 </Project>
