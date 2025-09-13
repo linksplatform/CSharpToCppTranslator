@@ -25,17 +25,17 @@ namespace CSharpToCppTranslator
         public static readonly IList<ISubstitutionRule> CustomRules = new List<SubstitutionRule>
         {
             // Just delete it in GenericCollectionMethodsBase.cs
-            (new Regex(@"\r?\n[\t ]+[^\r\n]* GetZero(.|\s)+Increment\(One\)(.|\s)+?}"), "", 0),
+            (new Regex(@"\r?\n[\t ]+[^\r\n]* GetZero[\s\S]*?Increment\(One\)[\s\S]*?}", RegexOptions.Singleline), "", 0),
             // Just delete it in SizedBinaryTreeMethodsBase.cs
-            (new Regex(@"\r?\n[\t ]+[^\r\n]* FixSizes(.|\s)+};"), "    };", 0),
+            (new Regex(@"\r?\n[\t ]+[^\r\n]* FixSizes[\s\S]*?};", RegexOptions.Singleline), "    };", 0),
             // Just delete it in SizedAndThreadedAVLBalancedTreeMethods.cs
-            (new Regex(@"\r?\n[\t ]+[^\r\n]* PrintNode(.|\s)+?}[\t ]*\r?\n"), "", 0),
+            (new Regex(@"\r?\n[\t ]+[^\r\n]* PrintNode[\s\S]*?}[\t ]*\r?\n", RegexOptions.Singleline), "", 0),
             // TElement path[MaxPath] = { {0} }; 
             // TElement path[MaxPath]; path[0] = 0;
             (new Regex(@"TElement path\[([_a-zA-Z0-9]+)\] = \{ \{0\} \};"), "TElement path[$1]; path[0] = 0;", 0),
             // UncheckedConverter<TElement, long>.Default.Convert(node)
             // node
-            (new Regex(@"UncheckedConverter<[a-zA-Z0-9:_]+, [a-zA-Z0-9:_]+>\.Default\.Convert\((?<argument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\)"), "${argument}", 0),
+            (new Regex(@"UncheckedConverter<[a-zA-Z0-9:_]+, [a-zA-Z0-9:_]+>\.Default\.Convert\(([^()]*)\)"), "$1", 0),
             // NumericType<TElement>.BytesSize
             // sizeof(TElement)
             (new Regex(@"NumericType<([a-zA-Z0-9]+)>\.BytesSize"), "sizeof($1)", 0),
@@ -76,7 +76,7 @@ namespace CSharpToCppTranslator
             // Inside the scope of ~!ex!~ replace:
             // ex.Ignore()
             // Platform::Exceptions::ExceptionExtensions::Ignore(ex)
-            (new Regex(@"(?<scope>/\*~(?<variable>[_a-zA-Z0-9]+)~\*/)(?<separator>.|\n)(?<before>((?<!/\*~\k<variable>~\*/)(.|\n))*?)\k<variable>\.Ignore\(\)"), "${scope}${separator}${before}Platform::Exceptions::ExceptionExtensions::Ignore(${variable})", 10),
+            (new Regex(@"([_a-zA-Z0-9]+)\.Ignore\(\)"), "Platform::Exceptions::ExceptionExtensions::Ignore($1)", 0),
             // Remove scope borders.
             // /*~ex~*/
             // 
@@ -88,7 +88,7 @@ namespace CSharpToCppTranslator
             // Inside the scope of ~!range!~ replace:
             // range.Difference()
             // Platform::Ranges::RangeExtensions::Difference(range)
-            (new Regex(@"(?<scope>/\*~(?<variable>[_a-zA-Z0-9]+)~\*/)(?<separator>.|\n)(?<before>((?<!/\*~\k<variable>~\*/)(.|\n))*?)\k<variable>\.Difference\(\)"), "${scope}${separator}${before}Platform::Ranges::RangeExtensions::Difference(${variable})", 10),
+            (new Regex(@"([_a-zA-Z0-9]+)\.Difference\(\)"), "Platform::Ranges::RangeExtensions::Difference($1)", 0),
             // Remove scope borders.
             // /*~range~*/
             // 
@@ -104,34 +104,34 @@ namespace CSharpToCppTranslator
             (new Regex(@"(\W)(Two)(\W)"), "${1}2$3", 0),
             // Comparer.Compare(firstArgument, secondArgument) < 0
             // (firstArgument) < (secondArgument)
-            (new Regex(@"(?<separator>\W)Comparer\.Compare\((?<firstArgument>((?<parenthesis>\()|(?<-parenthesis>\))|[^(),]*)+), (?<secondArgument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\) (?<operator>\S{1,2}) 0"), "${separator}(${firstArgument}) ${operator} (${secondArgument})", 0),
+            (new Regex(@"(\W)Comparer\.Compare\(([^,()]+(?:\([^)]*\)[^,()]*)*), ([^()]+(?:\([^)]*\)[^()]*)*)\) (\S{1,2}) 0"), "$1($2) $4 ($3)", 0),
             // !this->AreEqual(firstArgument, secondArgument)
             // (firstArgument) != (secondArgument)
-            (new Regex(@"(?<separator>\W)!(this->AreEqual|EqualityComparer\.Equals|EqualityComparer<[a-zA-Z0-9]+>\.Default\.Equals)\((?<firstArgument>((?<parenthesis>\()|(?<-parenthesis>\))|[^(),]*)+), (?<secondArgument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\)"), "${separator}(${firstArgument}) != (${secondArgument})", 0),
+            (new Regex(@"(\W)!(this->AreEqual|EqualityComparer\.Equals|EqualityComparer<[a-zA-Z0-9]+>\.Default\.Equals)\(([^,()]+(?:\([^)]*\)[^,()]*)*), ([^()]+(?:\([^)]*\)[^()]*)*)\)"), "$1($3) != ($4)", 0),
             // this->AreEqual(firstArgument, secondArgument)
             // (firstArgument) == (secondArgument)
-            (new Regex(@"(?<separator>\W)(?<!::)(this->AreEqual|EqualityComparer\.Equals|EqualityComparer<[a-zA-Z0-9]+>\.Default\.Equals)\((?<firstArgument>((?<parenthesis>\()|(?<-parenthesis>\))|[^(),]*)+), (?<secondArgument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\)"), "${separator}(${firstArgument}) == (${secondArgument})", 0),
+            (new Regex(@"(\W)(?<!::)(this->AreEqual|EqualityComparer\.Equals|EqualityComparer<[a-zA-Z0-9]+>\.Default\.Equals)\(([^,()]+(?:\([^)]*\)[^,()]*)*), ([^()]+(?:\([^)]*\)[^()]*)*)\)"), "$1($3) == ($4)", 0),
             // !this->EqualToZero(argument)
             // (argument) != 0
-            (new Regex(@"(?<separator>\W)!this->EqualToZero\((?<argument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\)"), "${separator}(${argument}) != 0", 0),
+            (new Regex(@"(\W)!this->EqualToZero\(([^()]*)\)"), "$1($2) != 0", 0),
             // this->EqualToZero(argument)
             // (argument) == 0
-            (new Regex(@"(?<separator>\W)this->EqualToZero\((?<argument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\)"), "${separator}(${argument}) == 0", 0),
+            (new Regex(@"(\W)this->EqualToZero\(([^()]*)\)"), "$1($2) == 0", 0),
             // this->Add(firstArgument, secondArgument)
             // (firstArgument) + (secondArgument)
-            (new Regex(@"(?<separator>\W)(Arithmetic\.Add|this->Add)\((?<firstArgument>((?<parenthesis>\()|(?<-parenthesis>\))|[^(),]*)+), (?<secondArgument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\)"), "${separator}(${firstArgument}) + (${secondArgument})", 0),
+            (new Regex(@"(\W)(Arithmetic\.Add|this->Add)\(([^,()]+(?:\([^)]*\)[^,()]*)*), ([^()]+(?:\([^)]*\)[^()]*)*)\)"), "$1($3) + ($4)", 0),
             // this->Increment(argument)
             // (argument) + 1
-            (new Regex(@"(?<separator>\W)(Arithmetic\.Increment|this->Increment)\((?<argument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\)"), "${separator}(${argument}) + 1", 0),
+            (new Regex(@"(\W)(Arithmetic\.Increment|this->Increment)\(([^()]*)\)"), "$1($3) + 1", 0),
             // this->Decrement(argument)
             // (argument) - 1;
-            (new Regex(@"(?<separator>\W)(Arithmetic\.Decrement|this->Decrement)\((?<argument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\)"), "${separator}(${argument}) - 1", 0),
+            (new Regex(@"(\W)(Arithmetic\.Decrement|this->Decrement)\(([^()]*)\)"), "$1($3) - 1", 0),
             // this->GreaterThan(firstArgument, secondArgument)
             // (firstArgument) > (secondArgument)
-            (new Regex(@"(?<separator>\W)this->GreaterThan\((?<firstArgument>((?<parenthesis>\()|(?<-parenthesis>\))|[^(),]*)+), (?<secondArgument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\)"), "${separator}(${firstArgument}) > (${secondArgument})", 0),
+            (new Regex(@"(\W)this->GreaterThan\(([^,()]+(?:\([^)]*\)[^,()]*)*), ([^()]+(?:\([^)]*\)[^()]*)*)\)"), "$1($2) > ($3)", 0),
             // this->GreaterThanZero(argument)
             // (argument) > 0
-            (new Regex(@"(?<separator>\W)this->GreaterThanZero\((?<argument>((?<parenthesis>\()|(?<-parenthesis>\))|[^()]*)+)\)"), "${separator}(${argument}) > 0", 0),
+            (new Regex(@"(\W)this->GreaterThanZero\(([^()]*)\)"), "$1($2) > 0", 0),
             // template <typename ...> class RecursionlessSizeBalancedTree;
             // template <std::size_t N, typename ...> class RecursionlessSizeBalancedTree;
             (new Regex(@"template <typename \.{3}> class ([a-zA-Z0-9]+Tree);"), "template <std::size_t N, typename ...> class $1;", 0),
@@ -188,7 +188,7 @@ namespace CSharpToCppTranslator
             (new Regex(@"\r?\n[\t ]*UnsubscribeFromProcessExitedEventIfPossible\(\);"), "", 0),
             // UnsubscribeFromProcessExitedEventIfPossible() { ... }
             // 
-            (new Regex(@"\r?\n(?<indent>[\t ]*)[^\n]+UnsubscribeFromProcessExitedEventIfPossible\(\)(.|\n)+?\r?\n\k<indent>}"), "", 0),
+            (new Regex(@"\r?\n([\t ]*)[^\n]+UnsubscribeFromProcessExitedEventIfPossible\(\)[\s\S]*?\r?\n\1}", RegexOptions.Singleline), "", 0),
         }.Cast<ISubstitutionRule>().ToList();
 
         /// <summary>
